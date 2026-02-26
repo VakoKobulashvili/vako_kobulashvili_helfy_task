@@ -61,7 +61,7 @@ router.put("/:id", validations, (req, res) => {
     task.completed = body.completed;
     task.priority = body.priority;
 
-    res.status(200).json({ message: "Task updated successfully!" });
+    res.status(200).json({ message: "Task updated successfully!", task });
   } catch (err) {
     res.status(500).json({ message: "Error updating task", err });
   }
@@ -103,6 +103,7 @@ router.patch("/:id/toggle", (req, res) => {
 
     res.status(200).json({
       message: "Task toggled successfully!",
+      task,
     });
   } catch (err) {
     res.status(500).json({

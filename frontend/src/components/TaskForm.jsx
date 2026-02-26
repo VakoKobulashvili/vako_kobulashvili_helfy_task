@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { createTask } from "../services/tasks.service";
+import { useEffect, useState } from "react";
+import { createTask, editTask } from "../services/tasks.service";
 
-const TaskForm = () => {
+const TaskForm = ({ editTaskData = null, onClose, onSuccess }) => {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [priority, setPriority] = useState("");
@@ -11,6 +11,14 @@ const TaskForm = () => {
     priority: "",
     general: "",
   });
+
+  // If we have editTaskData passed it means its edit form and not creating one!
+  useEffect(() => {
+    setTitle(editTaskData?.title ?? "");
+    setDesc(editTaskData?.description ?? "");
+    setPriority(editTaskData?.priority ?? "");
+    setErrors({ title: "", desc: "", priority: "", general: "" });
+  }, [editTaskData]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,20 +57,36 @@ const TaskForm = () => {
     }
 
     try {
-      await createTask({
-        title: title,
-        description: desc,
-        completed: false,
-        priority,
-      });
+      let resultTask;
 
-      setTitle("");
-      setDesc("");
-      setPriority("");
+      if (editTaskData) {
+        resultTask = await editTask(editTaskData.id, {
+          title: title,
+          description: desc,
+          completed: editTaskData.completed,
+          priority,
+        });
+      } else {
+        resultTask = await createTask({
+          title: title,
+          description: desc,
+          completed: false,
+          priority,
+        });
+
+        setTitle("");
+        setDesc("");
+        setPriority("");
+      }
+
+      onSuccess?.(resultTask);
+      onClose?.();
     } catch (err) {
       setErrors((prev) => ({
         ...prev,
-        general: "Error while creating task!",
+        general: editTaskData
+          ? "Error while updating task!"
+          : "Error while creating task!",
       }));
     }
   };
@@ -114,7 +138,9 @@ const TaskForm = () => {
         {errors.priority && <p className="error-message">{errors.priority}</p>}
       </div>
       {errors.general && <p className="error-message">{errors.general}</p>}
-      <button type="submit">Create Task</button>
+      <button type="submit">
+        {editTaskData ? "Edit Task" : "Create Task"}
+      </button>
     </form>
   );
 };

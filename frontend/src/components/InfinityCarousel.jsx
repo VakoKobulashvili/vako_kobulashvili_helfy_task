@@ -1,6 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import TaskItem from "./TaskItem";
 
-export default function InfinityCarousel({ tasks }) {
+export default function InfinityCarousel({
+  tasks,
+  onEdit,
+  onToggle,
+  onDelete,
+}) {
   const ref = useRef(null);
 
   // after research decided to use strategy, cloning first and last tasks
@@ -27,17 +33,20 @@ export default function InfinityCarousel({ tasks }) {
     }, 3000);
 
     return () => clearInterval(intervalId);
-  }, [tasks.length]);
+  }, [tasks]);
 
   return (
     <div className="carousel-wrapper">
       <div ref={ref} className="carousel-track">
         {items.map((t, index) => (
+          // two indexing to avoid duplicates
           <div key={`${t?.id}-${index}`} className="carousel-slide">
-            <div className="carousel-card">
-              <h3 className="carousel-title">{t?.title}</h3>
-              <p className="carousel-desc">{t?.description}</p>
-            </div>
+            <TaskItem
+              task={t}
+              onEdit={onEdit}
+              onToggle={onToggle}
+              onDelete={onDelete}
+            />
           </div>
         ))}
       </div>

@@ -1,26 +1,113 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { getTasks } from "../services/tasks.service";
+import { deleteTask, getTasks, toggleTask } from "../services/tasks.service";
 import InfinityCarousel from "./InfinityCarousel";
+import TaskForm from "./TaskForm";
 
 const TaskList = () => {
   const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [editingTask, setEditingTask] = useState(null);
+  const [deleteId, setDeleteId] = useState(null);
 
   useEffect(() => {
     const fetchTasks = async () => {
       try {
+        setLoading(true);
         const result = await getTasks();
         setTasks(result);
       } catch (err) {
         console.log("Failed to fetch tasks", err);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchTasks();
   }, []);
+
+  // updates created or edited data in state on success
+  const handleFormSuccess = (updatedTask) => {
+    setTasks((prev) => {
+      const filtered = prev.filter(
+        (t) => String(t.id) !== String(updatedTask.id),
+      );
+      return [updatedTask, ...filtered];
+    });
+
+    setEditingTask(null);
+  };
+
+  const handleToggleCompletion = async (taskId) => {
+    try {
+      const updatedTask = await toggleTask(taskId);
+
+      setTasks((prev) =>
+        prev.map((t) => (t.id === updatedTask.id ? updatedTask : t)),
+      );
+    } catch (err) {
+      console.log("Toggle failed", err);
+    }
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await deleteTask(deleteId);
+
+      setTasks((prev) => prev.filter((t) => String(t.id) !== String(deleteId)));
+    } catch (err) {
+      console.log("Error deleting task", err);
+    } finally {
+      setDeleteId(null);
+    }
+  };
+
   return (
     <div>
-      <InfinityCarousel tasks={tasks} />
+      {loading ? (
+        <div>Loading...</div>
+      ) : tasks.length === 0 ? (
+        <div>No tasks found!</div>
+      ) : (
+        <InfinityCarousel
+          tasks={tasks}
+          onEdit={setEditingTask}
+          onToggle={handleToggleCompletion}
+          onDelete={(id) => setDeleteId(id)}
+        />
+      )}
+
+      <TaskForm onSuccess={handleFormSuccess} />
+
+      {/* edit form modal, opens when clicking edit button */}
+      {editingTask && (
+        <div className="modal-window">
+          <button onClick={() => setEditingTask(null)}>Close Modal</button>
+
+          <TaskForm
+            editTaskData={editingTask}
+            onClose={() => setEditingTask(null)}
+            onSuccess={handleFormSuccess}
+          />
+        </div>
+      )}
+
+      {/* delete confirm modal, opens when delete clicking */}
+      {deleteId && (
+        <div className="modal-window">
+          <h1>Confirm if you want to delete</h1>
+          <div>
+            <button
+              onClick={() => {
+                confirmDelete();
+              }}
+            >
+              Confirm
+            </button>
+            <button onClick={() => setDeleteId(null)}>Cancel</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -32,3 +32,48 @@ export const createTask = async (task) => {
   const data = await response.json();
   return data;
 };
+
+export const editTask = async (id, payload) => {
+  const response = await fetch(`${API_BASE_URL}/tasks/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    throw new Error("Error while updating task!");
+  }
+
+  const data = await response.json();
+  return data.task;
+};
+
+export const toggleTask = async (id) => {
+  const response = await fetch(`${API_BASE_URL}/tasks/${id}/toggle`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Error while toggling task!");
+  }
+
+  const data = await response.json();
+  return data.task;
+};
+
+export const deleteTask = async (id) => {
+  const response = await fetch(`${API_BASE_URL}/tasks/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Error while deleting task!");
+  }
+
+  return true;
+};
