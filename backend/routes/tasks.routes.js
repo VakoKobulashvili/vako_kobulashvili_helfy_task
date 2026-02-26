@@ -1,4 +1,5 @@
 const express = require("express");
+const validations = require("../middleware/tasks.middleware");
 
 const router = express.Router();
 
@@ -23,7 +24,7 @@ router.get("/", (req, res) => {
   }
 });
 
-router.post("/", (req, res) => {
+router.post("/", validations, (req, res) => {
   try {
     const body = req.body;
 
@@ -44,7 +45,7 @@ router.post("/", (req, res) => {
   }
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", validations, (req, res) => {
   try {
     const body = req.body;
     const id = Number(req.params.id);
