@@ -13,7 +13,7 @@ let tasks = [
   },
 ];
 
-router.get("/", async (req, res) => {
+router.get("/", (req, res) => {
   try {
     const data = tasks;
 
@@ -23,12 +23,13 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", (req, res) => {
   try {
     const body = req.body;
 
+    // better id generation to avoid duplicates
     const newTask = {
-      id: tasks.length + 1,
+      id: tasks.length ? Math.max(...tasks.map((t) => t.id)) + 1 : 1,
       title: body.title,
       description: body.description,
       completed: body.completed,
@@ -43,7 +44,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", (req, res) => {
   try {
     const body = req.body;
     const id = Number(req.params.id);
@@ -65,7 +66,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", (req, res) => {
   try {
     const id = Number(req.params.id);
 
@@ -87,7 +88,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-router.patch("/:id/toggle", async (req, res) => {
+router.patch("/:id/toggle", (req, res) => {
   try {
     const id = Number(req.params.id);
 
