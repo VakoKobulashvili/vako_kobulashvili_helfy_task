@@ -2,7 +2,7 @@ const express = require("express");
 
 const router = express.Router();
 
-const tasks = [
+let tasks = [
   {
     id: 1,
     title: "task1",
@@ -64,7 +64,27 @@ router.put("/:id", async (req, res) => {
     res.status(500).json({ message: "Error updating task", err });
   }
 });
-// router.delete("/:id");
+
+router.delete("/:id", async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+
+    const taskExists = tasks.some((item) => item.id === id);
+
+    if (!taskExists) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    tasks = tasks.filter((item) => item.id !== id);
+
+    res.status(204).send();
+  } catch (err) {
+    res.status(500).json({
+      message: "Error deleting task",
+      err,
+    });
+  }
+});
 // router.patch("/:id/toggle");
 
 module.exports = router;
