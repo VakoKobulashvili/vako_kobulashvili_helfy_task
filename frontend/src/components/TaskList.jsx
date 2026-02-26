@@ -4,7 +4,7 @@ import { deleteTask, getTasks, toggleTask } from "../services/tasks.service";
 import InfinityCarousel from "./InfinityCarousel";
 import TaskForm from "./TaskForm";
 
-const TaskList = () => {
+const TaskList = ({ filter }) => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
@@ -25,6 +25,14 @@ const TaskList = () => {
 
     fetchTasks();
   }, []);
+
+  // filtering logic (final state)
+  const filteredTasks = tasks.filter((task) => {
+    if (filter === "all") return true;
+    if (filter === "completed") return task.completed;
+    if (filter === "pending") return !task.completed;
+    return false;
+  });
 
   // updates created or edited data in state on success
   const handleFormSuccess = (updatedTask) => {
@@ -66,11 +74,11 @@ const TaskList = () => {
     <div>
       {loading ? (
         <div>Loading...</div>
-      ) : tasks.length === 0 ? (
+      ) : filteredTasks.length === 0 ? (
         <div>No tasks found!</div>
       ) : (
         <InfinityCarousel
-          tasks={tasks}
+          tasks={filteredTasks}
           onEdit={setEditingTask}
           onToggle={handleToggleCompletion}
           onDelete={(id) => setDeleteId(id)}
