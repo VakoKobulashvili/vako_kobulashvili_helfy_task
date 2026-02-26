@@ -69,6 +69,7 @@ router.delete("/:id", async (req, res) => {
   try {
     const id = Number(req.params.id);
 
+    // Checks if even at least one id comparison is true
     const taskExists = tasks.some((item) => item.id === id);
 
     if (!taskExists) {
@@ -85,6 +86,28 @@ router.delete("/:id", async (req, res) => {
     });
   }
 });
-// router.patch("/:id/toggle");
+
+router.patch("/:id/toggle", async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+
+    const task = tasks.find((item) => item.id === id);
+
+    if (!task) {
+      return res.status(404).json({ message: "Task was not found!" });
+    }
+
+    task.completed = !task.completed;
+
+    res.status(200).json({
+      message: "Task toggled successfully!",
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Error toggling task!",
+      err,
+    });
+  }
+});
 
 module.exports = router;
