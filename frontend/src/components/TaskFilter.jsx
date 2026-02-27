@@ -1,6 +1,13 @@
 import "../styles/TaskFilter.css";
 
-const TaskFilter = ({ filter, setFilter, searchQuery, setSearchQuery }) => {
+const TaskFilter = ({
+  filter,
+  setFilter,
+  searchQuery,
+  setSearchQuery,
+  sort,
+  setSort,
+}) => {
   return (
     <div className="filter-container">
       <h2 className="filter-title">Filter Tasks</h2>
@@ -42,6 +49,22 @@ const TaskFilter = ({ filter, setFilter, searchQuery, setSearchQuery }) => {
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />
+
+      <div>
+        <h2 className="sort-title">Sort By</h2>
+        <div className="select-wrapper">
+          <select
+            name="sort"
+            id="sort"
+            value={sort}
+            onChange={(e) => setSort(e.target.value)}
+          >
+            <option value="date">Date</option>
+            <option value="title">Title</option>
+            <option value="priority">Priority</option>
+          </select>
+        </div>
+      </div>
     </div>
   );
 };

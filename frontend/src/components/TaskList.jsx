@@ -6,7 +6,7 @@ import TaskForm from "./TaskForm";
 
 import "../styles/TaskList.css";
 
-const TaskList = ({ filter, searchQuery }) => {
+const TaskList = ({ filter, searchQuery, sort }) => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
@@ -51,7 +51,7 @@ const TaskList = ({ filter, searchQuery }) => {
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
-  // filtering & search logic (final state)
+  // filtering & search logic
   const query = (debouncedSearch || "").trim().toLowerCase();
 
   const filteredTasks = tasks.filter((task) => {
@@ -66,6 +66,26 @@ const TaskList = ({ filter, searchQuery }) => {
       task.description.toLowerCase().includes(query);
 
     return status && search;
+  });
+
+  // sorting for bonus (final state)
+  const sortedTasks = [...filteredTasks].sort((a, b) => {
+    switch (sort) {
+      case "title":
+        return a.title.localeCompare(b.title);
+
+      case "priority":
+        const priorityOrder = ["high", "medium", "low"];
+        return (
+          priorityOrder.indexOf(a.priority) - priorityOrder.indexOf(b.priority)
+        );
+
+      case "date":
+        return new Date(a.createdAt) - new Date(b.createdAt);
+
+      default:
+        return new Date(b.createdAt) - new Date(a.createdAt);
+    }
   });
 
   // updates created or edited data in state on success
@@ -110,7 +130,7 @@ const TaskList = ({ filter, searchQuery }) => {
         <div className="loading">Loading...</div>
       ) : (
         <InfinityCarousel
-          tasks={filteredTasks}
+          tasks={sortedTasks}
           onEdit={setEditingTask}
           onToggle={handleToggleCompletion}
           onDelete={(id) => setDeleteId(id)}

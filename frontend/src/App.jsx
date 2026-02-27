@@ -6,6 +6,7 @@ import TaskList from "./components/TaskList";
 function App() {
   const [filter, setFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [sort, setSort] = useState("date");
   return (
     <>
       <TaskFilter
@@ -13,8 +14,10 @@ function App() {
         setFilter={setFilter}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        sort={sort}
+        setSort={setSort}
       />
-      <TaskList filter={filter} searchQuery={searchQuery} />
+      <TaskList filter={filter} searchQuery={searchQuery} sort={sort} />
     </>
   );
 }

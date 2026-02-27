@@ -3,7 +3,8 @@
   margin: 32px auto;
 }
 
-.filter-title {
+.filter-title,
+.sort-title {
   font-size: 30px;
   font-family: Arial, Helvetica, sans-serif;
   color: rgb(28, 28, 28);
@@ -47,4 +48,28 @@
   font-size: 16px;
   color: rgb(30, 30, 30);
   margin-top: 8px;
+}
+
+.sort-title {
+  margin-top: 16px;
+}
+
+select {
+  width: 100%;
+  border: 1px solid gray;
+  padding: 12px 14px;
+  border-radius: 6px;
+  font-size: 16px;
+  appearance: none;
+  outline: none;
+}
+
+.select-wrapper::after {
+  content: "▼";
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 12px;
 }
