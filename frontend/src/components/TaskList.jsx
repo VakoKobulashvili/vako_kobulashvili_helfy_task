@@ -6,13 +6,22 @@ import TaskForm from "./TaskForm";
 
 import "../styles/TaskList.css";
 
-const TaskList = ({ filter }) => {
+const TaskList = ({ filter, searchQuery }) => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
+  const [debouncedSearch, setDebouncedSearch] = useState(searchQuery);
 
   useEffect(() => {
+    // added localstorage for bonus, if storage exists fetch wont be used
+    const storage = localStorage.getItem("tasks");
+
+    if (storage) {
+      setTasks(JSON.parse(storage));
+      return;
+    }
+
     const fetchTasks = async () => {
       try {
         setLoading(true);
@@ -28,12 +37,35 @@ const TaskList = ({ filter }) => {
     fetchTasks();
   }, []);
 
-  // filtering logic (final state)
+  useEffect(() => {
+    if (tasks.length > 0) {
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+  }, [tasks]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+    }, 600);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  // filtering & search logic (final state)
+  const query = (debouncedSearch || "").trim().toLowerCase();
+
   const filteredTasks = tasks.filter((task) => {
-    if (filter === "all") return true;
-    if (filter === "completed") return task.completed;
-    if (filter === "pending") return !task.completed;
-    return false;
+    const status =
+      filter === "all" ||
+      (filter === "completed" && task.completed) ||
+      (filter === "pending" && !task.completed);
+
+    const search =
+      !query ||
+      task.title.toLowerCase().includes(query) ||
+      task.description.toLowerCase().includes(query);
+
+    return status && search;
   });
 
   // updates created or edited data in state on success

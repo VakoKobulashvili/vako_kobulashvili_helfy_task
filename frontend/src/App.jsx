@@ -5,10 +5,16 @@ import TaskList from "./components/TaskList";
 
 function App() {
   const [filter, setFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
   return (
     <>
-      <TaskFilter filter={filter} setFilter={setFilter} />
-      <TaskList filter={filter} />
+      <TaskFilter
+        filter={filter}
+        setFilter={setFilter}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+      />
+      <TaskList filter={filter} searchQuery={searchQuery} />
     </>
   );
 }

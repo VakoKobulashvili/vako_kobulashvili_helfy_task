@@ -37,3 +37,14 @@
 .filter-btn-active:hover {
   background-color: rgb(53, 53, 53);
 }
+
+.filter-container input {
+  width: 100%;
+  border: 1px solid gray;
+  border-radius: 6px;
+  outline: none;
+  padding: 12px 14px;
+  font-size: 16px;
+  color: rgb(30, 30, 30);
+  margin-top: 8px;
+}

@@ -1,6 +1,6 @@
 import "../styles/TaskFilter.css";
 
-const TaskFilter = ({ filter, setFilter }) => {
+const TaskFilter = ({ filter, setFilter, searchQuery, setSearchQuery }) => {
   return (
     <div className="filter-container">
       <h2 className="filter-title">Filter Tasks</h2>
@@ -33,6 +33,15 @@ const TaskFilter = ({ filter, setFilter }) => {
           Pending
         </button>
       </div>
+
+      <input
+        type="text"
+        id="search"
+        name="search"
+        placeholder="Search tasks..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
     </div>
   );
 };

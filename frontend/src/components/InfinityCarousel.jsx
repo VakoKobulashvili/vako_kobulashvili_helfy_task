@@ -7,9 +7,6 @@ export default function InfinityCarousel({
   onToggle,
   onDelete,
 }) {
-  if (!tasks || tasks.length === 0)
-    return <div className="no-tasks">Tasks do not exist!</div>;
-
   const [index, setIndex] = useState(tasks.length >= 2 ? 1 : 0);
   const [isAnimating, setIsAnimating] = useState(false);
   const trackRef = useRef(null);
@@ -53,6 +50,9 @@ export default function InfinityCarousel({
   };
 
   const transformValue = `translateX(-${index * 100}%)`;
+
+  if (!tasks || tasks.length === 0)
+    return <div className="no-tasks">Tasks do not exist!</div>;
 
   return (
     <div className="carousel-container">
