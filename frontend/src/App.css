@@ -1,25 +1,46 @@
-.carousel-wrapper {
-  max-width: 600px;
+.carousel-container {
+  width: 100%;
+  max-width: 500px;
   margin: 0 auto;
+  margin-bottom: 40px;
+}
+
+.carousel-viewport {
   overflow: hidden;
+  width: 100%;
 }
 
 .carousel-track {
   display: flex;
-  overflow-x: hidden;
-  scroll-snap-type: x mandatory;
+  will-change: transform;
+}
+
+.carousel-track.animating {
+  transition: transform 450ms ease-in-out;
 }
 
 .carousel-slide {
   flex: 0 0 100%;
-  scroll-snap-align: start;
-  padding: 20px;
+  min-width: 100%;
 }
 
-.modal-window {
-  position: fixed;
-  width: 30%;
-  height: 30%;
-  top: 50%;
-  left: 50%;
+.no-tasks,
+.loading {
+  width: 500px;
+  margin: 0 auto;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  color: rgb(28, 28, 28);
+  margin-bottom: 24px;
+}
+
+@media screen and (max-width: 580px) {
+  .filter-container {
+    margin-left: 30px !important;
+    margin-right: 30px !important;
+  }
+
+  .tasklist-container {
+    margin: 0 30px;
+  }
 }

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { createTask, editTask } from "../services/tasks.service";
 
+import "../styles/TaskForm.css";
+
 const TaskForm = ({ editTaskData = null, onClose, onSuccess }) => {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
@@ -92,8 +94,13 @@ const TaskForm = ({ editTaskData = null, onClose, onSuccess }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
+    <form onSubmit={handleSubmit} className="form-container">
+      {editTaskData ? (
+        <h1 className="form-title">Edit Task</h1>
+      ) : (
+        <h1 className="form-title">Create Task</h1>
+      )}
+      <div className="input-container">
         <label htmlFor="title">Title</label>
         <input
           type="text"
@@ -106,7 +113,7 @@ const TaskForm = ({ editTaskData = null, onClose, onSuccess }) => {
         />
         {errors.title && <p className="error-message">{errors.title}</p>}
       </div>
-      <div>
+      <div className="input-container">
         <label htmlFor="description">Description</label>
         <textarea
           name="description"
@@ -118,27 +125,29 @@ const TaskForm = ({ editTaskData = null, onClose, onSuccess }) => {
         ></textarea>
         {errors.desc && <p className="error-message">{errors.desc}</p>}
       </div>
-      <div>
+      <div className="input-container">
         <label htmlFor="priority">Priority</label>
-        <select
-          id="priority"
-          name="priority"
-          value={priority}
-          onChange={(e) => {
-            setPriority(e.target.value);
-          }}
-        >
-          <option value="" disabled>
-            Select priority
-          </option>
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-        </select>
+        <div className="select-wrapper">
+          <select
+            id="priority"
+            name="priority"
+            value={priority}
+            onChange={(e) => {
+              setPriority(e.target.value);
+            }}
+          >
+            <option value="" disabled>
+              Select priority
+            </option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
         {errors.priority && <p className="error-message">{errors.priority}</p>}
       </div>
       {errors.general && <p className="error-message">{errors.general}</p>}
-      <button type="submit">
+      <button type="submit" className="form-btn">
         {editTaskData ? "Edit Task" : "Create Task"}
       </button>
     </form>

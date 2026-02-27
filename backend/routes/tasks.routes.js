@@ -34,7 +34,7 @@ router.post("/", validations, (req, res) => {
       title: body.title,
       description: body.description,
       completed: body.completed,
-      createdAt: new Date(),
+      createdAt: new Date().toLocaleDateString("en-US"),
       priority: body.priority,
     };
 

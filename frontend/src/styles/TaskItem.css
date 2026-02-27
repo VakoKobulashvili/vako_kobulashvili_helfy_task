@@ -1,0 +1,77 @@
+.card-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border: 1px solid gray;
+  border-radius: 8px;
+  height: 100%;
+  padding: 16px 20px;
+  justify-content: space-between;
+}
+
+.card-title-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-title-container p {
+  font-size: 16px;
+  color: gray;
+}
+
+.card-title {
+  font-size: 30px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: rgb(28, 28, 28);
+}
+
+.card-desc {
+  color: gray;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  text-align: justify;
+}
+
+.card-completed,
+.card-priority {
+  font-family: Arial, Helvetica, sans-serif;
+  color: rgb(28, 28, 28);
+  font-size: 18px;
+}
+
+.card-btns-container {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.card-primary-btn {
+  padding: 12px 36px;
+  height: 44px;
+  font-size: 16px;
+  cursor: pointer;
+  border: 0;
+  border-radius: 6px;
+  background-color: rgb(28, 28, 28);
+  color: white;
+  transition: 0.2s ease-in-out;
+}
+
+.card-primary-btn:hover {
+  background-color: rgb(53, 53, 53);
+}
+
+.card-secondary-btn {
+  padding: 12px 36px;
+  height: 44px;
+  font-size: 16px;
+  cursor: pointer;
+  border: 0;
+  border-radius: 6px;
+  border: 1px solid rgb(28, 28, 28);
+  background-color: rgb(255, 255, 255);
+  color: rgb(28, 28, 28);
+  transition: 0.2s ease-in-out;
+}

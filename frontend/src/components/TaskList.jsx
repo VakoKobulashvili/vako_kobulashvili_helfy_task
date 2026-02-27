@@ -4,6 +4,8 @@ import { deleteTask, getTasks, toggleTask } from "../services/tasks.service";
 import InfinityCarousel from "./InfinityCarousel";
 import TaskForm from "./TaskForm";
 
+import "../styles/TaskList.css";
+
 const TaskList = ({ filter }) => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -71,11 +73,9 @@ const TaskList = ({ filter }) => {
   };
 
   return (
-    <div>
+    <div className="tasklist-container">
       {loading ? (
-        <div>Loading...</div>
-      ) : filteredTasks.length === 0 ? (
-        <div>No tasks found!</div>
+        <div className="loading">Loading...</div>
       ) : (
         <InfinityCarousel
           tasks={filteredTasks}
@@ -90,29 +90,41 @@ const TaskList = ({ filter }) => {
       {/* edit form modal, opens when clicking edit button */}
       {editingTask && (
         <div className="modal-window">
-          <button onClick={() => setEditingTask(null)}>Close Modal</button>
+          <div className="modal-content">
+            <button
+              onClick={() => setEditingTask(null)}
+              className="modal-close-btn"
+            >
+              &times;
+            </button>
 
-          <TaskForm
-            editTaskData={editingTask}
-            onClose={() => setEditingTask(null)}
-            onSuccess={handleFormSuccess}
-          />
+            <TaskForm
+              editTaskData={editingTask}
+              onClose={() => setEditingTask(null)}
+              onSuccess={handleFormSuccess}
+            />
+          </div>
         </div>
       )}
 
       {/* delete confirm modal, opens when delete clicking */}
       {deleteId && (
         <div className="modal-window">
-          <h1>Confirm if you want to delete</h1>
-          <div>
-            <button
-              onClick={() => {
-                confirmDelete();
-              }}
-            >
-              Confirm
-            </button>
-            <button onClick={() => setDeleteId(null)}>Cancel</button>
+          <div className="modal-content">
+            <h1 className="modal-title">Do you want to delete permanently?</h1>
+            <div className="modal-btn-container">
+              <button
+                onClick={() => {
+                  confirmDelete();
+                }}
+                className="confirm-btn"
+              >
+                Confirm
+              </button>
+              <button onClick={() => setDeleteId(null)} className="cancel-btn">
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       )}
